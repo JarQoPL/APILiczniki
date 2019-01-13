@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="licznikidbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Klienci">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Imie" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nazwisko" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ulica" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="numer_budynku" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="miejscowosc" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="kod_pocztowy" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="liczniki_id" Type="Int32" />
+    <NavigationProperty Name="Liczniki" Relationship="Self.FK_Klienci_Liczniki" FromRole="Klienci" ToRole="Liczniki" />
+  </EntityType>
+  <EntityType Name="Liczniki">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="numer" Type="String" MaxLength="9" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="model" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="producent" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="stan" Type="Double" Nullable="false" />
+    <Property Name="taryfa" Type="String" MaxLength="4" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Klienci" Relationship="Self.FK_Klienci_Liczniki" FromRole="Liczniki" ToRole="Klienci" />
+  </EntityType>
+  <Association Name="FK_Klienci_Liczniki">
+    <End Role="Liczniki" Type="Self.Liczniki" Multiplicity="0..1" />
+    <End Role="Klienci" Type="Self.Klienci" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Liczniki">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Klienci">
+        <PropertyRef Name="liczniki_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="licznikidbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Klienci" EntityType="Self.Klienci" />
+    <EntitySet Name="Liczniki" EntityType="Self.Liczniki" />
+    <AssociationSet Name="FK_Klienci_Liczniki" Association="Self.FK_Klienci_Liczniki">
+      <End Role="Liczniki" EntitySet="Liczniki" />
+      <End Role="Klienci" EntitySet="Klienci" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
